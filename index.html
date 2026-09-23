@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OutfitAI</title>
+
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f5f5f5;
+  color: #111;
+}
+
+header {
+  background: #111;
+  color: white;
+  text-align: center;
+  padding: 30px 20px;
+}
+
+header h1 {
+  margin: 0;
+  font-size: 36px;
+}
+
+header p {
+  margin: 8px 0 0;
+  opacity: 0.8;
+}
+
+.container {
+  max-width: 600px;
+  margin: auto;
+  padding: 20px;
+}
+
+.card {
+  background: white;
+  padding: 22px;
+  margin-bottom: 20px;
+  border-radius: 20px;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+}
+
+h2 {
+  margin-top: 0;
+}
+
+label {
+  display: block;
+  font-weight: bold;
+  margin: 18px 0 8px;
+}
+
+input, select {
+  width: 100%;
+  padding: 14px;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  font-size: 16px;
+  background: white;
+}
+
+button {
+  width: 100%;
+  margin-top: 22px;
+  padding: 16px;
+  border: none;
+  border-radius: 14px;
+  background: #111;
+  color: white;
+  font-size: 17px;
+  font-weight: bold;
+}
+
+.result {
+  display: none;
+}
+
+.item {
+  background: #f2f2f2;
+  padding: 15px;
+  border-radius: 14px;
+  margin: 10px 0;
+}
+
+.item strong {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.total {
+  font-size: 25px;
+  font-weight: bold;
+  margin-top: 20px;
+}
+
+.tag {
+  display: inline-block;
+  background: #eee;
+  padding: 7px 10px;
+  border-radius: 20px;
+  margin: 3px;
+  font-size: 13px;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <h1>✨ OutfitAI</h1>
+  <p>Ton style. Ton budget. Ton outfit.</p>
+</header>
+
+<div class="container">
+
+  <div class="card">
+    <h2>👕 Crée ton outfit</h2>
+
+    <label>💰 Ton budget</label>
+    <input id="budget" type="number" placeholder="Exemple : 80">
+
+    <label>🔥 Ton style</label>
+    <select id="style">
+      <option value="streetwear">Streetwear</option>
+      <option value="casual">Casual</option>
+      <option value="sport">Sport</option>
+      <option value="vintage">Vintage</option>
+      <option value="chic">Chic</option>
+    </select>
+
+    <label>🎨 Ta couleur préférée</label>
+    <select id="color">
+      <option>Noir</option>
+      <option>Blanc</option>
+      <option>Gris</option>
+      <option>Bleu</option>
+      <option>Beige</option>
+    </select>
+
+    <label>👟 Tes chaussures</label>
+    <select id="shoes">
+      <option>Sneakers</option>
+      <option>Chaussures de sport</option>
+      <option>Boots</option>
+      <option>Chaussures classiques</option>
+    </select>
+
+    <button onclick="generateOutfit()">
+      ✨ Créer mon outfit
+    </button>
+  </div>
+
+  <div class="card result" id="result">
+
+    <h2>🔥 Ton outfit</h2>
+
+    <div id="tags"></div>
+
+    <div class="item">
+      <strong>👕 Haut</strong>
+      <span id="top"></span>
+    </div>
+
+    <div class="item">
+      <strong>👖 Bas</strong>
+      <span id="bottom"></span>
+    </div>
+
+    <div class="item">
+      <strong>👟 Chaussures</strong>
+      <span id="shoe"></span>
+    </div>
+
+    <div class="item">
+      <strong>🧢 Accessoire</strong>
+      <span id="accessory"></span>
+    </div>
+
+    <div class="total">
+      💰 Total : <span id="total"></span> €
+    </div>
+
+    <p>✨ Outfit créé selon tes préférences !</p>
+
+  </div>
+
+</div>
+
+<script>
+
+function generateOutfit() {
+
+  const budget = Number(document.getElementById("budget").value);
+  const style = document.getElementById("style").value;
+  const color = document.getElementById("color").value;
+  const shoes = document.getElementById("shoes").value;
+
+  if (!budget || budget <= 0) {
+    alert("Entre ton budget !");
+    return;
+  }
+
+  let top;
+  let bottom;
+  let accessory;
+
+  if (style === "streetwear") {
+    top = "Hoodie oversized " + color;
+    bottom = "Cargo";
+    accessory = "Casquette";
+  }
+
+  else if (style === "casual") {
+    top = "T-shirt " + color;
+    bottom = "Jean droit";
+    accessory = "Montre";
+  }
+
+  else if (style === "sport") {
+    top = "T-shirt technique " + color;
+    bottom = "Jogging";
+    accessory = "Sac banane";
+  }
+
+  else if (style === "vintage") {
+    top = "Sweat rétro " + color;
+    bottom = "Jean vintage";
+    accessory = "Casquette rétro";
+  }
+
+  else {
+    top = "Chemise " + color;
+    bottom = "Pantalon droit";
+    accessory = "Montre classique";
+  }
+
+  const topPrice = Math.round(budget * 0.30);
+  const bottomPrice = Math.round(budget * 0.30);
+  const shoePrice = Math.round(budget * 0.30);
+  const accessoryPrice = Math.round(budget * 0.10);
+
+  const total =
+    topPrice +
+    bottomPrice +
+    shoePrice +
+    accessoryPrice;
+
+  document.getElementById("top").textContent =
+    top + " — " + topPrice + " €";
+
+  document.getElementById("bottom").textContent =
+    bottom + " — " + bottomPrice + " €";
+
+  document.getElementById("shoe").textContent =
+    shoes + " — " + shoePrice + " €";
+
+  document.getElementById("accessory").textContent =
+    accessory + " — " + accessoryPrice + " €";
+
+  document.getElementById("total").textContent = total;
+
+  document.getElementById("tags").innerHTML =
+    '<span class="tag">' + style + '</span>' +
+    '<span class="tag">' + color + '</span>' +
+    '<span class="tag">' + budget + ' €</span>';
+
+  document.getElementById("result").style.display = "block";
+
+  document.getElementById("result").scrollIntoView({
+    behavior: "smooth"
+  });
+}
+
+</script>
+
+</body>
+</html>
