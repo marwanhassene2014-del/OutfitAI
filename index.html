@@ -6,108 +6,151 @@
 <title>OutfitAI</title>
 
 <style>
-* {
-  box-sizing: border-box;
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:Arial,sans-serif;
+  background:#0d0d12;
+  color:white;
 }
-
-body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  background: #f5f5f5;
-  color: #111;
+header{
+  padding:22px 18px;
+  background:linear-gradient(135deg,#171722,#24243a);
+  position:sticky;
+  top:0;
+  z-index:5;
 }
-
-header {
-  background: #111;
-  color: white;
-  text-align: center;
-  padding: 30px 20px;
+.logo{
+  font-size:28px;
+  font-weight:900;
 }
-
-header h1 {
-  margin: 0;
-  font-size: 36px;
+.logo span{color:#8b5cf6}
+.subtitle{
+  color:#aaa;
+  margin-top:5px;
 }
-
-header p {
-  margin: 8px 0 0;
-  opacity: 0.8;
+nav{
+  display:flex;
+  gap:8px;
+  overflow:auto;
+  margin-top:18px;
 }
-
-.container {
-  max-width: 600px;
-  margin: auto;
-  padding: 20px;
+nav button{
+  white-space:nowrap;
+  border:0;
+  border-radius:20px;
+  padding:10px 15px;
+  background:#292936;
+  color:white;
 }
-
-.card {
-  background: white;
-  padding: 22px;
-  margin-bottom: 20px;
-  border-radius: 20px;
-  box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+nav button.active{
+  background:#8b5cf6;
 }
-
-h2 {
-  margin-top: 0;
+main{
+  max-width:700px;
+  margin:auto;
+  padding:18px;
 }
-
-label {
-  display: block;
-  font-weight: bold;
-  margin: 18px 0 8px;
+.card{
+  background:#181820;
+  border:1px solid #292936;
+  border-radius:18px;
+  padding:18px;
+  margin-bottom:18px;
 }
-
-input, select {
-  width: 100%;
-  padding: 14px;
-  border: 1px solid #ddd;
-  border-radius: 12px;
-  font-size: 16px;
-  background: white;
+h2{margin-top:0}
+label{
+  display:block;
+  margin-top:14px;
+  margin-bottom:7px;
+  color:#ccc;
 }
-
-button {
-  width: 100%;
-  margin-top: 22px;
-  padding: 16px;
-  border: none;
-  border-radius: 14px;
-  background: #111;
-  color: white;
-  font-size: 17px;
-  font-weight: bold;
+input,select{
+  width:100%;
+  padding:13px;
+  border-radius:12px;
+  border:1px solid #393946;
+  background:#101016;
+  color:white;
 }
-
-.result {
-  display: none;
+button.primary{
+  width:100%;
+  padding:15px;
+  margin-top:18px;
+  border:0;
+  border-radius:13px;
+  background:#8b5cf6;
+  color:white;
+  font-size:16px;
+  font-weight:bold;
 }
-
-.item {
-  background: #f2f2f2;
-  padding: 15px;
-  border-radius: 14px;
-  margin: 10px 0;
+button.secondary{
+  border:0;
+  border-radius:12px;
+  padding:11px 14px;
+  background:#292936;
+  color:white;
 }
-
-.item strong {
-  display: block;
-  margin-bottom: 5px;
+.photoBox{
+  border:2px dashed #454553;
+  border-radius:16px;
+  padding:25px;
+  text-align:center;
 }
-
-.total {
-  font-size: 25px;
-  font-weight: bold;
-  margin-top: 20px;
+#photoPreview{
+  display:none;
+  width:150px;
+  height:150px;
+  object-fit:cover;
+  border-radius:50%;
+  margin:15px auto 0;
 }
-
-.tag {
-  display: inline-block;
-  background: #eee;
-  padding: 7px 10px;
-  border-radius: 20px;
-  margin: 3px;
-  font-size: 13px;
+.outfit{
+  background:#101016;
+  border-radius:15px;
+  padding:16px;
+  margin-top:15px;
+}
+.item{
+  padding:12px;
+  border-bottom:1px solid #292936;
+}
+.item:last-child{border-bottom:0}
+.score{
+  font-size:40px;
+  font-weight:900;
+  text-align:center;
+  color:#a78bfa;
+}
+.tag{
+  display:inline-block;
+  background:#292936;
+  border-radius:15px;
+  padding:7px 10px;
+  margin:4px;
+  font-size:13px;
+}
+.friend{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:13px 0;
+  border-bottom:1px solid #292936;
+}
+.avatar{
+  width:42px;
+  height:42px;
+  border-radius:50%;
+  background:#8b5cf6;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:bold;
+}
+.hidden{display:none}
+.small{
+  color:#999;
+  font-size:13px;
 }
 </style>
 </head>
@@ -115,171 +158,488 @@ button {
 <body>
 
 <header>
-  <h1>✨ OutfitAI</h1>
-  <p>Ton style. Ton budget. Ton outfit.</p>
+  <div class="logo">Outfit<span>AI</span> 👕</div>
+  <div class="subtitle">Ton style. Ton budget. Ton outfit.</div>
+
+  <nav>
+    <button class="active" onclick="showPage('create',this)">✨ Créer</button>
+    <button onclick="showPage('wardrobe',this)">👕 Dressing</button>
+    <button onclick="showPage('friends',this)">👥 Amis</button>
+    <button onclick="showPage('profile',this)">👤 Profil</button>
+  </nav>
 </header>
 
-<div class="container">
+<main>
 
-  <div class="card">
-    <h2>👕 Crée ton outfit</h2>
+<!-- CRÉATION -->
+<section id="create">
 
-    <label>💰 Ton budget</label>
-    <input id="budget" type="number" placeholder="Exemple : 80">
+<div class="card">
+<h2>🤳 Ton profil pour l'outfit</h2>
 
-    <label>🔥 Ton style</label>
-    <select id="style">
-      <option value="streetwear">Streetwear</option>
-      <option value="casual">Casual</option>
-      <option value="sport">Sport</option>
-      <option value="vintage">Vintage</option>
-      <option value="chic">Chic</option>
-    </select>
+<div class="photoBox">
+  <strong>Ajoute une photo de toi</strong>
+  <p class="small">Photo appareil ou galerie</p>
 
-    <label>🎨 Ta couleur préférée</label>
-    <select id="color">
-      <option>Noir</option>
-      <option>Blanc</option>
-      <option>Gris</option>
-      <option>Bleu</option>
-      <option>Beige</option>
-    </select>
+  <input
+    type="file"
+    id="photo"
+    accept="image/*"
+    capture="user"
+  >
 
-    <label>👟 Tes chaussures</label>
-    <select id="shoes">
-      <option>Sneakers</option>
-      <option>Chaussures de sport</option>
-      <option>Boots</option>
-      <option>Chaussures classiques</option>
-    </select>
+  <img id="photoPreview">
+</div>
 
-    <button onclick="generateOutfit()">
-      ✨ Créer mon outfit
-    </button>
-  </div>
+<label>Taille</label>
+<input id="height" type="number" placeholder="Ex : 150">
 
-  <div class="card result" id="result">
+<label>Couleur préférée</label>
+<select id="color">
+<option>Noir</option>
+<option>Blanc</option>
+<option>Bleu</option>
+<option>Rouge</option>
+<option>Vert</option>
+<option>Violet</option>
+<option>Aucune préférence</option>
+</select>
 
-    <h2>🔥 Ton outfit</h2>
+<label>Style</label>
+<select id="style">
+<option>Streetwear</option>
+<option>Sportwear</option>
+<option>Casual</option>
+<option>Classe</option>
+<option>Oversize</option>
+<option>Aucun</option>
+</select>
 
-    <div id="tags"></div>
+<label>Occasion</label>
+<select id="occasion">
+<option>Aucun</option>
+<option>École</option>
+<option>Sortie</option>
+<option>Sport</option>
+<option>Anniversaire</option>
+<option>Soirée</option>
+</select>
 
-    <div class="item">
-      <strong>👕 Haut</strong>
-      <span id="top"></span>
-    </div>
+<label>Météo</label>
+<select id="weather">
+<option>Aucun</option>
+<option>☀️ Chaud</option>
+<option>🌤️ Doux</option>
+<option>🌧️ Pluie</option>
+<option>❄️ Froid</option>
+</select>
 
-    <div class="item">
-      <strong>👖 Bas</strong>
-      <span id="bottom"></span>
-    </div>
+<label>Budget maximum (€)</label>
+<input id="budget" type="number" placeholder="Ex : 100">
 
-    <div class="item">
-      <strong>👟 Chaussures</strong>
-      <span id="shoe"></span>
-    </div>
-
-    <div class="item">
-      <strong>🧢 Accessoire</strong>
-      <span id="accessory"></span>
-    </div>
-
-    <div class="total">
-      💰 Total : <span id="total"></span> €
-    </div>
-
-    <p>✨ Outfit créé selon tes préférences !</p>
-
-  </div>
+<button class="primary" onclick="generateOutfit()">
+🤖 CRÉER MON OUTFIT
+</button>
 
 </div>
 
+<div id="result" class="card hidden">
+<h2>✨ Ton outfit</h2>
+
+<div id="outfitResult"></div>
+
+<div class="outfit">
+<h3>⭐ Score OutfitAI</h3>
+<div id="score" class="score">--/100</div>
+<p id="scoreText" style="text-align:center"></p>
+</div>
+
+<button class="primary" onclick="publishOutfit()">
+📸 Publier mon outfit
+</button>
+</div>
+
+</section>
+
+
+<!-- DRESSING -->
+<section id="wardrobe" class="hidden">
+
+<div class="card">
+<h2>👕 Mon dressing</h2>
+<p class="small">
+Ajoute tes vrais vêtements et leurs marques.
+</p>
+
+<label>Photo du vêtement</label>
+<input type="file" accept="image/*">
+
+<label>Marque</label>
+<select id="brand">
+<option>Nike</option>
+<option>Adidas</option>
+<option>Puma</option>
+<option>Jordan</option>
+<option>New Balance</option>
+<option>H&M</option>
+<option>Zara</option>
+<option>Autre</option>
+</select>
+
+<label>Type</label>
+<select id="type">
+<option>T-shirt</option>
+<option>Sweat</option>
+<option>Hoodie</option>
+<option>Pantalon</option>
+<option>Jean</option>
+<option>Short</option>
+<option>Veste</option>
+<option>Chaussures</option>
+</select>
+
+<button class="primary" onclick="addClothing()">
+➕ Ajouter au dressing
+</button>
+
+</div>
+
+<div class="card">
+<h2>🧥 Mes vêtements</h2>
+<div id="wardrobeList">
+<p class="small">Aucun vêtement ajouté pour le moment.</p>
+</div>
+</div>
+
+</section>
+
+
+<!-- AMIS -->
+<section id="friends" class="hidden">
+
+<div class="card">
+<h2>👥 Mes amis</h2>
+
+<input id="friendName" placeholder="Nom d'utilisateur">
+
+<button class="primary" onclick="addFriend()">
+➕ Ajouter un ami
+</button>
+
+<div id="friendsList">
+
+<div class="friend">
+<div class="avatar">A</div>
+<div>
+<strong>Alex</strong>
+<div class="small">@alexstyle</div>
+</div>
+</div>
+
+<div class="friend">
+<div class="avatar">Y</div>
+<div>
+<strong>Yanis</strong>
+<div class="small">@yanis_fit</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="card">
+<h2>💬 Avis sur ton outfit</h2>
+
+<div class="friend">
+<div class="avatar">A</div>
+<div>
+<strong>Alex</strong>
+<div>🔥 « Très lourd ! »</div>
+<span class="tag">9/10</span>
+</div>
+</div>
+
+<div class="friend">
+<div class="avatar">Y</div>
+<div>
+<strong>Yanis</strong>
+<div>😮 « Les couleurs vont bien ensemble »</div>
+<span class="tag">8/10</span>
+</div>
+</div>
+
+</div>
+
+</section>
+
+
+<!-- PROFIL -->
+<section id="profile" class="hidden">
+
+<div class="card">
+<h2>👤 Mon profil</h2>
+
+<div style="text-align:center">
+<div class="avatar" style="width:80px;height:80px;margin:auto;font-size:30px">
+M
+</div>
+
+<h2>Marwan</h2>
+<p class="small">@outfit_user</p>
+</div>
+
+<hr style="border-color:#292936">
+
+<p>👕 Outfits créés : <strong id="outfitCount">0</strong></p>
+<p>⭐ Meilleur score : <strong id="bestScore">--</strong></p>
+<p>👥 Amis : <strong>2</strong></p>
+
+</div>
+
+</section>
+
+</main>
+
+
 <script>
 
-function generateOutfit() {
+let outfitCount = 0;
+let bestScore = 0;
 
-  const budget = Number(document.getElementById("budget").value);
-  const style = document.getElementById("style").value;
+const photo = document.getElementById("photo");
+const preview = document.getElementById("photoPreview");
+
+photo.addEventListener("change", function(){
+
+  const file = this.files[0];
+
+  if(file){
+    preview.src = URL.createObjectURL(file);
+    preview.style.display = "block";
+  }
+
+});
+
+
+function showPage(page,button){
+
+  document.querySelectorAll("main > section")
+  .forEach(section => section.classList.add("hidden"));
+
+  document.getElementById(page).classList.remove("hidden");
+
+  document.querySelectorAll("nav button")
+  .forEach(btn => btn.classList.remove("active"));
+
+  button.classList.add("active");
+}
+
+
+function generateOutfit(){
+
   const color = document.getElementById("color").value;
-  const shoes = document.getElementById("shoes").value;
+  const style = document.getElementById("style").value;
+  const occasion = document.getElementById("occasion").value;
+  const weather = document.getElementById("weather").value;
+  const budget = Number(document.getElementById("budget").value) || 0;
+  const height = document.getElementById("height").value;
 
-  if (!budget || budget <= 0) {
-    alert("Entre ton budget !");
+  let top = "T-shirt";
+  let bottom = "Jean";
+  let shoes = "Baskets";
+  let layer = "";
+
+  if(weather.includes("Froid")){
+    top = "Hoodie";
+    layer = "Veste";
+  }
+
+  if(weather.includes("Pluie")){
+    layer = "Veste imperméable";
+  }
+
+  if(weather.includes("Chaud")){
+    top = "T-shirt";
+    bottom = "Short";
+  }
+
+  if(style === "Streetwear"){
+    top = "Hoodie oversize";
+    bottom = "Cargo";
+    shoes = "Sneakers";
+  }
+
+  if(style === "Sportwear"){
+    top = "T-shirt sportif";
+    bottom = "Jogging";
+    shoes = "Baskets sport";
+  }
+
+  if(style === "Classe"){
+    top = "Chemise";
+    bottom = "Pantalon droit";
+    shoes = "Sneakers propres";
+  }
+
+  if(occasion === "Sport"){
+    top = "Maillot";
+    bottom = "Short";
+    shoes = "Chaussures de sport";
+  }
+
+  let estimated = 70;
+
+  if(budget > 0 && budget < 70){
+    estimated = budget;
+  }
+
+  let score = 78;
+
+  if(color !== "Aucune préférence") score += 5;
+  if(style !== "Aucun") score += 5;
+  if(occasion !== "Aucun") score += 3;
+  if(weather !== "Aucun") score += 3;
+  if(height) score += 2;
+
+  score = Math.min(score,98);
+
+  outfitCount++;
+
+  if(score > bestScore){
+    bestScore = score;
+  }
+
+  document.getElementById("outfitCount").textContent = outfitCount;
+  document.getElementById("bestScore").textContent = bestScore + "/100";
+
+  let html = `
+    <div class="outfit">
+
+      <div class="item">
+        👕 <strong>Haut</strong><br>
+        ${top}
+      </div>
+
+      <div class="item">
+        👖 <strong>Bas</strong><br>
+        ${bottom}
+      </div>
+
+      ${layer ? `
+      <div class="item">
+        🧥 <strong>Couche</strong><br>
+        ${layer}
+      </div>` : ""}
+
+      <div class="item">
+        👟 <strong>Chaussures</strong><br>
+        ${shoes}
+      </div>
+
+      <div class="item">
+        🎨 <strong>Couleur</strong><br>
+        ${color}
+      </div>
+
+      <div class="item">
+        💰 <strong>Budget estimé</strong><br>
+        ${estimated} €
+      </div>
+
+      <div style="margin-top:12px">
+        <span class="tag">${style}</span>
+        <span class="tag">${occasion}</span>
+        <span class="tag">${weather}</span>
+      </div>
+
+    </div>
+  `;
+
+  document.getElementById("outfitResult").innerHTML = html;
+
+  document.getElementById("score").textContent = score + "/100";
+
+  document.getElementById("scoreText").textContent =
+    score >= 90
+    ? "🔥 Outfit très bien assorti !"
+    : score >= 80
+    ? "😎 Très bon outfit !"
+    : "👍 Bonne base, tu peux encore l'améliorer.";
+
+  document.getElementById("result").classList.remove("hidden");
+
+  document.getElementById("result").scrollIntoView({
+    behavior:"smooth"
+  });
+}
+
+
+function addClothing(){
+
+  const brand = document.getElementById("brand").value;
+  const type = document.getElementById("type").value;
+
+  const list = document.getElementById("wardrobeList");
+
+  if(list.querySelector(".small")){
+    list.innerHTML = "";
+  }
+
+  const item = document.createElement("div");
+  item.className = "friend";
+
+  item.innerHTML = `
+    <div class="avatar">👕</div>
+    <div>
+      <strong>${brand}</strong>
+      <div class="small">${type}</div>
+    </div>
+  `;
+
+  list.appendChild(item);
+}
+
+
+function addFriend(){
+
+  const name = document.getElementById("friendName").value.trim();
+
+  if(!name){
+    alert("Écris le nom de ton ami !");
     return;
   }
 
-  let top;
-  let bottom;
-  let accessory;
+  const list = document.getElementById("friendsList");
 
-  if (style === "streetwear") {
-    top = "Hoodie oversized " + color;
-    bottom = "Cargo";
-    accessory = "Casquette";
-  }
+  const friend = document.createElement("div");
+  friend.className = "friend";
 
-  else if (style === "casual") {
-    top = "T-shirt " + color;
-    bottom = "Jean droit";
-    accessory = "Montre";
-  }
+  friend.innerHTML = `
+    <div class="avatar">
+      ${name.charAt(0).toUpperCase()}
+    </div>
+    <div>
+      <strong>${name}</strong>
+      <div class="small">@${name.toLowerCase()}</div>
+    </div>
+  `;
 
-  else if (style === "sport") {
-    top = "T-shirt technique " + color;
-    bottom = "Jogging";
-    accessory = "Sac banane";
-  }
+  list.appendChild(friend);
 
-  else if (style === "vintage") {
-    top = "Sweat rétro " + color;
-    bottom = "Jean vintage";
-    accessory = "Casquette rétro";
-  }
+  document.getElementById("friendName").value = "";
+}
 
-  else {
-    top = "Chemise " + color;
-    bottom = "Pantalon droit";
-    accessory = "Montre classique";
-  }
 
-  const topPrice = Math.round(budget * 0.30);
-  const bottomPrice = Math.round(budget * 0.30);
-  const shoePrice = Math.round(budget * 0.30);
-  const accessoryPrice = Math.round(budget * 0.10);
+function publishOutfit(){
 
-  const total =
-    topPrice +
-    bottomPrice +
-    shoePrice +
-    accessoryPrice;
+  alert(
+    "📸 Ton outfit est prêt à être publié !\n\n" +
+    "Dans la prochaine version, on pourra ajouter un vrai fil d'actualité avec likes, commentaires et avis des amis."
+  );
 
-  document.getElementById("top").textContent =
-    top + " — " + topPrice + " €";
-
-  document.getElementById("bottom").textContent =
-    bottom + " — " + bottomPrice + " €";
-
-  document.getElementById("shoe").textContent =
-    shoes + " — " + shoePrice + " €";
-
-  document.getElementById("accessory").textContent =
-    accessory + " — " + accessoryPrice + " €";
-
-  document.getElementById("total").textContent = total;
-
-  document.getElementById("tags").innerHTML =
-    '<span class="tag">' + style + '</span>' +
-    '<span class="tag">' + color + '</span>' +
-    '<span class="tag">' + budget + ' €</span>';
-
-  document.getElementById("result").style.display = "block";
-
-  document.getElementById("result").scrollIntoView({
-    behavior: "smooth"
-  });
 }
 
 </script>
 
 </body>
-</html>
+      </html>
